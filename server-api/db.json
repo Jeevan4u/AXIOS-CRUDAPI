@@ -1,0 +1,16 @@
+{
+  "Contact": [
+    {
+      "Name": "jeevan",
+      "Email": "jeevan@231.com",
+      "Password": "password",
+      "id": 1
+    },
+    {
+      "Name": "jeevankarki",
+      "Email": "jeevakarki@gmail.com",
+      "Password": "sad",
+      "id": 2
+    }
+  ]
+}
