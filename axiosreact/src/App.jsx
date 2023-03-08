@@ -14,7 +14,6 @@ function App() {
   const editStatetrue = () => {
     setEdit(true);
   };
-  console.log("edit", edit);
   const editStatefalse = () => {
     setEdit(false);
   };
