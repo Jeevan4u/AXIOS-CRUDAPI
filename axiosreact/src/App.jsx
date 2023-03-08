@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Contactcards from "./Components/Contactcards";
 import Form from "./Components/Form";
 import Card from "./Components/Card";
+import AddContact from "./Components/AddContact";
 function App() {
   // retrive contacts
   const [contacts, setContacts] = useState();
@@ -120,6 +121,7 @@ function App() {
           />
         ) : null}
         {/* <Card /> */}
+        {/* <AddContact /> */}
       </div>
     </div>
   );

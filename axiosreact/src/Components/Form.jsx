@@ -21,10 +21,29 @@ const Form = ({
   const validator = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   // Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:
 
-  const [message, setMessage] = useState();
-  const [emailErr, setEmailErr] = useState("");
-  const [password, setPassword] = useState();
-  const [passwordERR, setPasswordERR] = useState("");
+  const [email, setEmail] = useState({ value: "", error: false, message: "" });
+  const [password, setPassword] = useState({
+    value: "",
+    error: false,
+    message: "",
+  });
+
+  const emailValid = (e) => {
+    setEmail((prevState) => ({
+      ...prevState,
+      value: e.target.value,
+      error: false,
+      message: "",
+    }));
+  };
+  const passwordValid = (e) => {
+    setPassword((prevState) => ({
+      ...prevState,
+      value: e.target.value,
+      error: false,
+      message: "",
+    }));
+  };
 
   useEffect(() => {
     if (editState === true) {
@@ -71,24 +90,49 @@ const Form = ({
   // }
   const submitHandler = (e) => {
     e.preventDefault();
-    if (validator.test(formContactData.Email)) {
-      setEmailErr("Email set  Sucess");
-      setMessage(false);
-      if (validPassword.test(formContactData.Password)) {
-        setPasswordERR(false);
-        setPassword("Passowrd set sucessfully");
+    if (email.value === "") {
+      setEmail((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Email Cannot be empty",
+      }));
+    } else if (password.value === "") {
+      setPassword((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Password Feild Cannot be Empty",
+      }));
+    } else if (validator.test(email.value)) {
+      setEmail((prevState) => ({
+        ...prevState,
+        error: false,
+        message: "sucessly email",
+      }));
+      if (validPassword.test(password.value)) {
+        setPassword((prevState) => ({
+          ...prevState,
+          error: false,
+          message: "Sucess",
+        }));
         formSubmitData(formContactData);
         dataUpdate();
         setFormContactData(clearFormData);
         close();
       } else {
-        setPasswordERR(true);
-        setPassword("Password Must contain 1 Caps 1 Special char and min 8");
+        setPassword((prevState) => ({
+          ...prevState,
+          error: true,
+          message: "Password format is Invalid",
+        }));
       }
     } else {
-      setMessage(true);
-      setEmailErr("Incorrect Email");
+      setEmail((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Email format is invalid",
+      }));
     }
+
     // formSubmitData(formContactData);
     // dataUpdate();
     // setFormContactData(clearFormData);
@@ -97,12 +141,30 @@ const Form = ({
 
   const updateHandler = (e) => {
     e.preventDefault();
-    if (validator.test(formContactData.Email)) {
-      setEmailErr("Email set  Sucess");
-      setMessage(false);
-      if (validPassword.test(formContactData.Password)) {
-        setPasswordERR(false);
-        setPassword("Passowrd set sucessfully");
+    if (email.value === "") {
+      setEmail((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Email Cannot be empty",
+      }));
+    } else if (password.value === "") {
+      setPassword((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Password Feild Cannot be Empty",
+      }));
+    } else if (validator.test(email.value)) {
+      setEmail((prevState) => ({
+        ...prevState,
+        error: false,
+        message: "sucessly email",
+      }));
+      if (validPassword.test(password.value)) {
+        setPassword((prevState) => ({
+          ...prevState,
+          error: false,
+          message: "Sucess",
+        }));
         editContactData(editData.id, formContactData);
         editUpdate();
         setFormContactData({
@@ -114,17 +176,27 @@ const Form = ({
         close();
         editStatefalse();
       } else {
-        setPasswordERR(true);
-        setPassword("Password Must contain 1 Caps 1 Special char and min 8");
+        setPassword((prevState) => ({
+          ...prevState,
+          error: true,
+          message: "Password format is Invalid",
+        }));
       }
     } else {
-      setMessage(true);
-      setEmailErr("Incorrect Email");
+      setEmail((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Email format is invalid",
+      }));
     }
-
     // editContactData(editData.id, formContactData);
     // editUpdate();
-    // setFormContactData(clearFormData);
+    // setFormContactData({
+    //   ...formContactData,
+    //   Name: "",
+    //   Email: "",
+    //   Password: "",
+    // });
     // close();
     // editStatefalse();
   };
@@ -144,24 +216,28 @@ const Form = ({
             value={formContactData.Name}
           />
         </div>
-        <div className="email my-3 flex justify-between">
+        <div className="email my-3 flex justify-between items-center">
           <label htmlFor="email " className="mr-5">
             Email
           </label>
-          <input
-            type="email"
-            placeholder="Enter Your Email"
-            required
-            className="appearance-none focus:outline-red-600 py-2 px-4"
-            onChange={(e) => emailHandler(e)}
-            value={formContactData.Email}
-          />
+          <div className="inputfeildContainer">
+            <input
+              type="email"
+              placeholder="Enter Your Email"
+              required
+              className="appearance-none focus:outline-red-600 py-2 px-4"
+              onChange={(e) => {
+                emailHandler(e);
+                emailValid(e);
+              }}
+              value={formContactData.Email}
+            />
+            {email.error === true && (
+              <h1 className="text-center py-2">{email.message}</h1>
+            )}
+          </div>
         </div>
-        {message === true ? (
-          <h3 className="text-[18px]  text-center my-3">{emailErr}</h3>
-        ) : (
-          <h3 className="text-[18px]  text-end my-3 mr-1">{emailErr}</h3>
-        )}
+
         <div className="password flex justify-between items-center">
           <label htmlFor="password" className="mr-5">
             Password
@@ -171,31 +247,23 @@ const Form = ({
               type={`${showPassword ? "text" : "password"}`}
               required
               className="mb-5 appearance-none focus:outline-red-600 py-2 px-4"
-              onChange={(e) => passwordHandler(e)}
+              onChange={(e) => {
+                passwordHandler(e);
+                passwordValid(e);
+              }}
               value={formContactData.Password}
               placeholder="Minimum eight characters, at least one letter, one number and one special character:>"
             />
+            {password.error === true && <h1>{password.message}</h1>}
             <h1
-              className="border border-white p-2 self-start cursor-pointer text-base text-center"
+              className="border border-white p-2 self-start cursor-pointer text-base text-center mb-3"
               onClick={() => setShowPassword(!showPassword)}
             >
               Show Password
             </h1>
           </div>
         </div>
-        {passwordERR === true ? (
-          <h3 className="text-[18px]  text-center my-3 max-w-[200px] mx-auto p-4">
-            {password}
-          </h3>
-        ) : formContactData.Password === "" ? (
-          <h3 className="text-[18px]  text-end my-3 mr-1">
-            Please fill the Password
-          </h3>
-        ) : formContactData.Password.length < 8 ? (
-          <h3 className="text-[18px]  text-end my-3 mr-1">
-            passwordMust be Minimum of 8
-          </h3>
-        ) : null}
+
         <div className="submit flex justify-between">
           {editState ? (
             <button
