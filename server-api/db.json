@@ -4,13 +4,25 @@
       "Name": "JeevanKarki",
       "Email": "Lol@gmail.com",
       "Password": "Lol@assasin2",
-      "id": 1
+      "id": 2
     },
     {
-      "Name": "asdasd",
-      "Email": "asdasdasda",
-      "Password": "asdadada",
+      "Name": "Abinash",
+      "Email": "Lol@gmail.com",
+      "Password": "Lol@assasin2",
       "id": 2
+    },
+    {
+      "Name": "Bijen",
+      "Email": "Lol@gmail.com",
+      "Password": "Lol@assasin2",
+      "id": 3
+    },
+    {
+      "Name": "Self",
+      "Email": "Lol@gmail.com",
+      "Password": "Lol@assasin2",
+      "id": 4
     }
   ]
 }
